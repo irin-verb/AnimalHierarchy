@@ -7,22 +7,15 @@ using System.Windows;
 
 namespace KPO
 {
+    /// <summary>
+    /// Корова
+    /// </summary>
     public class Cow : FriendlyAnimal
     {
         /// <summary>
         /// Максимальное значение шкалы здоровья коровы
-         /// </summary>
-        private const byte MAX_HEALTH = 10;
-
-        /// <summary>
-        /// Словарь предметов, выпадающих с коровы, и соответствующих им вероятностей выпадения
         /// </summary>
-        private static readonly Dictionary<Drop, byte> DROPS
-            = new Dictionary<Drop, byte>()
-            { 
-                { Drop.Skin, 20 },
-                { Drop.BeefMeat, 90 }   
-            };
+        private const byte MAX_HEALTH = 10;
 
         /// <summary>
         /// Возможность сидеть на корове
@@ -33,6 +26,16 @@ namespace KPO
         /// Максимальное количество молока в корове
         /// </summary>
         private const byte MAX_MILK_LITERS = 4;
+
+        /// <summary>
+        /// Словарь предметов, выпадающих с коровы, и соответствующих им вероятностей выпадения
+        /// </summary>
+        private static readonly Dictionary<Drop, byte> DefaultDrops
+            = new Dictionary<Drop, byte>()
+            {
+                { Drop.Skin, 20 },
+                { Drop.BeefMeat, 90 }
+            };
 
 
         /// <summary>
@@ -66,7 +69,7 @@ namespace KPO
             Dictionary<Drop, byte> parDrops = null,
             bool parAbleToSit = IS_ABLE_TO_SIT,
             byte parMilkLiters = MAX_MILK_LITERS)
-            : base(parName, parLocation, parMaxHealth, parDrops ?? DROPS, parAbleToSit)
+            : base(parName, parLocation, parMaxHealth, parDrops ?? DefaultDrops, parAbleToSit)
         { 
             LitersOfMilk = parMilkLiters;
         }

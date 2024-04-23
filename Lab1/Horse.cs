@@ -16,16 +16,16 @@ namespace KPO
         private const byte MAX_HEALTH = 16;
 
         /// <summary>
-        /// Словарь предметов, выпадающих с лошади, и соответствующих им вероятностей выпадения
-        /// </summary>
-        private static readonly Dictionary<Drop, byte> DROPS
-            = new Dictionary<Drop, byte>()
-            { { Drop.Skin, 20 }  };
-
-        /// <summary>
         /// Возможность сидеть на лошади
         /// </summary>
         private const bool IS_ABLE_TO_SIT = true;
+
+        /// <summary>
+        /// Словарь предметов, выпадающих с лошади, и соответствующих им вероятностей выпадения
+        /// </summary>
+        private static readonly Dictionary<Drop, byte> DefaultDrops
+            = new Dictionary<Drop, byte>()
+            { { Drop.Skin, 20 }  };
 
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace KPO
             Dictionary<Drop, byte> parDrops = null,
             bool parAbleToSit = IS_ABLE_TO_SIT,
             List<Drop> parThingsInSaddleBag = null)
-            : base(parName, parLocation, parMaxHealth, parDrops ?? DROPS, parAbleToSit)
+            : base(parName, parLocation, parMaxHealth, parDrops ?? DefaultDrops, parAbleToSit)
         {
             SaddleBag = parThingsInSaddleBag ?? new List<Drop>();
         }

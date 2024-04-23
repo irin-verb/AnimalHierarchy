@@ -23,7 +23,7 @@ namespace KPO
         /// <summary>
         /// Словарь предметов, выпадающих с волка, и соответствующих им вероятностей выпадения
         /// </summary>
-        private static readonly Dictionary<Drop, byte> DROPS
+        private static readonly Dictionary<Drop, byte> DefaultDrops
             = new Dictionary<Drop, byte>() 
             { { Drop.Bone, 120 } };
 
@@ -49,7 +49,7 @@ namespace KPO
             byte parMaxHealth = MAX_HEALTH,
             Dictionary<Drop, byte> parDrops = null,
             byte parBiteDamage = BITE_DAMAGE)
-            : base(parName, parLocation, parMaxHealth, parDrops ?? DROPS, parBiteDamage) 
+            : base(parName, parLocation, parMaxHealth, parDrops ?? DefaultDrops, parBiteDamage) 
         {
             OwnerName = parOwnerName;
         }

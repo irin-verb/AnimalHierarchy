@@ -13,17 +13,17 @@ namespace KPO
         /// <summary>
         /// Радиус плавания по кругу
         /// </summary>
-        private static readonly double CIRCULATION_RADIUS = 20;
+        private const double CIRCULATION_RADIUS = 20;
 
         /// <summary>
         /// Расстояние, на которое переплывает дельфин за раз
         /// </summary>
-        private static readonly double CIRCULATION_STEP = 1;
+        private const double CIRCULATION_STEP = 1;
 
         /// <summary>
         /// Вероятность случайно съесть рыбу при перемещении
         /// </summary>
-        private static readonly double CATCHING_FISH_PROBABILITY = 0.05;
+        private const double CATCHING_FISH_PROBABILITY = 0.05;
 
         /// <summary>
         /// Сила укуса дельфина
@@ -38,7 +38,7 @@ namespace KPO
         /// <summary>
         /// Словарь предметов, выпадающих с дельфина, и соответствующих им вероятностей выпадения
         /// </summary>
-        private static readonly Dictionary<Drop, byte> DROPS
+        private static readonly Dictionary<Drop, byte> DefaultDrops
             = new Dictionary<Drop, byte>()
             {
                 { Drop.Codfish, 100 },
@@ -67,7 +67,7 @@ namespace KPO
             byte parMaxHealth = MAX_HEALTH,
             Dictionary<Drop, byte> parDrops = null,
             byte parBiteDamage = BITE_DAMAGE)
-            : base(parName, parLocation, parMaxHealth, parDrops ?? DROPS, parBiteDamage)
+            : base(parName, parLocation, parMaxHealth, parDrops ?? DefaultDrops, parBiteDamage)
         {
             TreasureLocation = parTreasureLocation;
         }
