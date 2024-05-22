@@ -13,30 +13,9 @@ namespace KPO
     public class Cow : FriendlyAnimal
     {
         /// <summary>
-        /// Максимальное значение шкалы здоровья коровы
-        /// </summary>
-        private const byte MAX_HEALTH = 10;
-
-        /// <summary>
-        /// Возможность сидеть на корове
-        /// </summary>
-        private const bool IS_ABLE_TO_SIT = false;
-
-        /// <summary>
         /// Максимальное количество молока в корове
         /// </summary>
-        private const byte MAX_MILK_LITERS = 4;
-
-        /// <summary>
-        /// Словарь предметов, выпадающих с коровы, и соответствующих им вероятностей выпадения
-        /// </summary>
-        private static readonly Dictionary<Drop, byte> DefaultDrops
-            = new Dictionary<Drop, byte>()
-            {
-                { Drop.Skin, 20 },
-                { Drop.BeefMeat, 90 }
-            };
-
+        public const byte MAX_MILK_LITERS = 4;
 
         /// <summary>
         /// Шкала молока коровы
@@ -50,7 +29,7 @@ namespace KPO
         public byte LitersOfMilk
         {
             get => _litersOfMilk;
-            private set => _litersOfMilk = value < 0 ? (byte)0 : value > MAX_MILK_LITERS ? MAX_MILK_LITERS : value;
+            set => _litersOfMilk = value < 0 ? (byte)0 : value > MAX_MILK_LITERS ? MAX_MILK_LITERS : value;
         }
 
 
@@ -59,21 +38,45 @@ namespace KPO
         /// </summary>
         /// <param name="parName">Имя животного</param>
         /// <param name="parLocation">Координаты животного</param>
-        /// <param name="parMaxHealth">Максимальное здоровье животного</param>
-        /// <param name="parDrops">Словарь выпадающих с животного предметов</param>
+        /// <param name="parHealth">Здоровье животного</param>
+        /// <param name="parDrop">Предмет, который животное несет во рту</param>
         /// <param name="parAbleToSit">Возможность сидеть на животном</param>
         /// <param name="parMilkLiters">Наполненность коровы молоком</param>
         public Cow(string parName,
             Point parLocation,
-            byte parMaxHealth = MAX_HEALTH,
-            Dictionary<Drop, byte> parDrops = null,
+            byte parHealth = MAX_HEALTH,
+            Drop parDrop = Drop.None,
             bool parAbleToSit = IS_ABLE_TO_SIT,
             byte parMilkLiters = MAX_MILK_LITERS)
-            : base(parName, parLocation, parMaxHealth, parDrops ?? DefaultDrops, parAbleToSit)
+            : base(parName, parLocation, parHealth, parDrop, parAbleToSit)
         { 
             LitersOfMilk = parMilkLiters;
         }
 
+        /// <summary>
+        /// Пустой конструктор
+        /// </summary>
+        public Cow() : base() { }
+
+        /// <summary>
+        /// Конструктор копирования
+        /// </summary>
+        /// <param name="parAnimal">Животное, которое копируется</param>
+        public Cow(Cow parAnimal) : base(parAnimal)
+        {
+            Copy(parAnimal);
+        }
+
+
+        /// <summary>
+        /// Копировать параметры животного
+        /// </summary>
+        /// <param name="parAnimal">Животного, параметры которого копируются</param>
+        public override void Copy(Animal parAnimal)
+        {
+            base.Copy(parAnimal);
+            LitersOfMilk = ((Cow)parAnimal).LitersOfMilk;
+        }
 
         /// <summary>
         /// Покормить корову
@@ -82,22 +85,22 @@ namespace KPO
         public override sealed void ToEat( byte parSatiety ) 
         { 
             base.ToEat(parSatiety);
-            if (Health == MaxHealth) LitersOfMilk += parSatiety;
+            LitersOfMilk += parSatiety;
         }
 
         /// <summary>
         /// Подоить корову
         /// </summary>
         /// <returns>Количество литров молока</returns>
-        public Tuple<Drop, byte>? ToMilk()
+        public byte ToMilk()
         {
             if (LitersOfMilk > 0)
             {
-                Tuple<Drop, byte> milking = new(Drop.Skin, LitersOfMilk);
+                byte milking = LitersOfMilk;
                 LitersOfMilk = 0;
                 return milking;
             }
-            return null;
+            return 0;
         }
     }
 }

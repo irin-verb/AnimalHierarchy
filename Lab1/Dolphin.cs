@@ -25,26 +25,6 @@ namespace KPO
         /// </summary>
         private const double CATCHING_FISH_PROBABILITY = 0.05;
 
-        /// <summary>
-        /// Сила укуса дельфина
-        /// </summary>
-        private const byte BITE_DAMAGE = 1;
-
-        /// <summary>
-        /// Максимальное значение шкалы здоровья дельфина
-        /// </summary>
-        private const byte MAX_HEALTH = 8;
-
-        /// <summary>
-        /// Словарь предметов, выпадающих с дельфина, и соответствующих им вероятностей выпадения
-        /// </summary>
-        private static readonly Dictionary<Drop, byte> DefaultDrops
-            = new Dictionary<Drop, byte>()
-            {
-                { Drop.Codfish, 100 },
-                { Drop.Bone, 20 }
-            };
-
 
         /// <summary>
         /// Координаты сокровища
@@ -56,23 +36,47 @@ namespace KPO
         /// Конструктор
         /// </summary>
         /// <param name="parName">Имя животного</param>
-        /// <param name="parMaxHealth">Максимальное здоровье животного</param>
+        /// <param name="parHealth">Здоровье животного</param>
+        /// <param name="parDrop">Предмет, который животное несет во рту</param>
         /// <param name="parLocation">Координаты животного</param>
         /// <param name="parBiteDamage">Сала укуса животного</param>
-        /// <param name="parDrops">Словарь выпадающих с животного предметов</param>
         /// <param name="parTreasureLocation">Координаты сокровища</param>
-        public Dolphin(string parName,            
+        public Dolphin(string parName,
             Point parLocation,
             Point parTreasureLocation,
-            byte parMaxHealth = MAX_HEALTH,
-            Dictionary<Drop, byte> parDrops = null,
-            byte parBiteDamage = BITE_DAMAGE)
-            : base(parName, parLocation, parMaxHealth, parDrops ?? DefaultDrops, parBiteDamage)
+            byte parHealth = MAX_HEALTH,
+            Drop parDrop = Drop.None,
+            byte parBiteDamage = MAX_BITE_DAMAGE)
+            : base(parName, parLocation, parHealth, parDrop, parBiteDamage)
         {
             TreasureLocation = parTreasureLocation;
         }
 
- 
+        /// <summary>
+        /// Пустой конструктор
+        /// </summary>
+        public Dolphin() : base() { }
+
+        /// <summary>
+        /// Конструктор копирования
+        /// </summary>
+        /// <param name="parAnimal">Животное, которое копируется</param>
+        public Dolphin(Dolphin parAnimal) : base(parAnimal)
+        {
+            Copy(parAnimal);
+        }
+
+
+        /// <summary>
+        /// Копировать параметры животного
+        /// </summary>
+        /// <param name="parAnimal">Животного, параметры которого копируются</param>
+        public override void Copy(Animal parAnimal)
+        {
+            base.Copy(parAnimal);
+            TreasureLocation = ((Dolphin)parAnimal).TreasureLocation;
+        }
+
         /// <summary>
         /// Переплыть в место, ближайшее к окружности вокруг сокровища
         /// </summary>
@@ -121,7 +125,7 @@ namespace KPO
                 ToCirculate();
             // в пути дельфин мог наткнуться или не наткнуться на рыбу
             bool hasCatchedFish = new Random().NextDouble() <= CATCHING_FISH_PROBABILITY;
-            if (hasCatchedFish) ToEat(BITE_DAMAGE);
+            if (hasCatchedFish) ToEat(BiteDamage);
             return hasCatchedFish ? Drop.Codfish : null;
         }
 

@@ -1,4 +1,6 @@
 ﻿
+using System.ComponentModel;
+
 namespace KPO
 {
     /// <summary>
@@ -7,24 +9,40 @@ namespace KPO
     public enum Drop
     {
         /// <summary>
+        /// Ничего
+        /// </summary>
+        [Description("Ничего")] None,
+        /// <summary>
+        /// Пшеница
+        /// </summary>
+        [Description("Пшеница")] Wheat,
+        /// <summary>
         /// Треска
         /// </summary>
-        Codfish, 
+        [Description("Треска")] Codfish,
         /// <summary>
-        /// Кожа
+        /// Трава
         /// </summary>
-        Skin, 
+        [Description("Трава")] Herb,
         /// <summary>
-        /// Говядина
+        /// Сено
         /// </summary>
-        BeefMeat, 
+        [Description("Сено")] Hay,
+        /// <summary>
+        /// Листья
+        /// </summary>
+        [Description("Листья")] Leaves,
+        /// <summary>
+        /// Водоросли
+        /// </summary>
+        [Description("Водоросли")] Seaweed,
+        /// <summary>
+        /// Мясо
+        /// </summary>
+        [Description("Мясо")] Meat,
         /// <summary>
         /// Кость
         /// </summary>
-        Bone,
-        /// <summary>
-        /// Молоко
-        /// </summary>
-        Milk
+        [Description("Кость")] Bone
     }
 }

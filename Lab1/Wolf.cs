@@ -9,58 +9,64 @@ namespace KPO
     /// Волк
     /// </summary>
     public class Wolf: NeutralAnimal
-    {
-        /// <summary>
-        /// Сила укуса волка
-        /// </summary>
-        private const byte BITE_DAMAGE = 2;
-
-        /// <summary>
-        /// Максимальное значение шкалы здоровья волка
-        /// </summary>
-        private const byte MAX_HEALTH = 12;
-
-        /// <summary>
-        /// Словарь предметов, выпадающих с волка, и соответствующих им вероятностей выпадения
-        /// </summary>
-        private static readonly Dictionary<Drop, byte> DefaultDrops
-            = new Dictionary<Drop, byte>() 
-            { { Drop.Bone, 120 } };
-
-        
+    {     
         /// <summary>
         /// Имя владельца волка
         /// </summary>
-        public string OwnerName { get; set; }
+        public string OwnerName { get; set; } = "";
 
 
         /// <summary>
         /// Конструктор
         /// </summary>
         /// <param name="parName">Имя животного</param>
-        /// <param name="parMaxHealth">Максимальное здоровье животного</param>
-        /// <param name="parOwnerName">Имя владельца животного</param>
+        /// <param name="parHealth">Здоровье животного</param>
         /// <param name="parLocation">Координаты животного</param>
+        /// <param name="parDrop">Предмет, который животное несет во рту</param>
+        /// <param name="parOwnerName">Имя владельца животного</param>
         /// <param name="parBiteDamage">Сала укуса животного</param>
-        /// <param name="parDrops">Словарь выпадающих с животного предметов</param>
         public Wolf(string parName, 
             string parOwnerName,
             Point parLocation,
-            byte parMaxHealth = MAX_HEALTH,
-            Dictionary<Drop, byte> parDrops = null,
-            byte parBiteDamage = BITE_DAMAGE)
-            : base(parName, parLocation, parMaxHealth, parDrops ?? DefaultDrops, parBiteDamage) 
+            byte parHealth = MAX_HEALTH,
+            Drop parDrop = Drop.None,
+            byte parBiteDamage = MAX_BITE_DAMAGE)
+            : base(parName, parLocation, parHealth, parDrop, parBiteDamage) 
         {
             OwnerName = parOwnerName;
         }
 
+        /// <summary>
+        /// Пустой конструктор
+        /// </summary>
+        public Wolf() : base() { }
+
+        /// <summary>
+        /// Конструктор копирования
+        /// </summary>
+        /// <param name="parAnimal">Животное, которое копируется</param>
+        public Wolf(Wolf parAnimal) : base(parAnimal)
+        {
+            Copy(parAnimal);
+        }
+
+
+        /// <summary>
+        /// Копировать параметры животного
+        /// </summary>
+        /// <param name="parAnimal">Животного, параметры которого копируются</param>
+        public override void Copy(Animal parAnimal)
+        {
+            base.Copy(parAnimal);
+            OwnerName = ((Wolf)parAnimal).OwnerName;
+        }
 
         /// <summary>
         /// Охотиться
         /// </summary>
         /// <param name="parAnimals">Список животных для охоты</param>
-        /// <returns>Случайный выпадаемый с жертвы предмет</returns>
-        public Drop? ToHunt( Animal[] parAnimals )
+        /// <returns>Предмет, который жертва могла нести во рту</returns>
+        public Drop ToHunt( Animal[] parAnimals )
         {
             double[] distances = parAnimals.Select(elAnimal => (Location - elAnimal.Location).Length).ToArray();
             Animal victim = parAnimals[Array.IndexOf(parAnimals, distances.Max())];

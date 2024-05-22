@@ -11,72 +11,69 @@ namespace KPO
     public class Horse : FriendlyAnimal
     {
         /// <summary>
-        /// Максимальное значение шкалы здоровья лошади
+        /// Седло
         /// </summary>
-        private const byte MAX_HEALTH = 16;
-
-        /// <summary>
-        /// Возможность сидеть на лошади
-        /// </summary>
-        private const bool IS_ABLE_TO_SIT = true;
-
-        /// <summary>
-        /// Словарь предметов, выпадающих с лошади, и соответствующих им вероятностей выпадения
-        /// </summary>
-        private static readonly Dictionary<Drop, byte> DefaultDrops
-            = new Dictionary<Drop, byte>()
-            { { Drop.Skin, 20 }  };
-
-
-        /// <summary>
-        /// Седельная сумка для вещей
-        /// </summary>
-        public List<Drop> SaddleBag { get; private set; } = new List<Drop>();
+        public Saddle Saddle { get; set; }
 
 
         /// <summary>
         /// Конструктор
         /// </summary>
         /// <param name="parName">Имя животного</param>
+        /// <param name="parHealth">Здоровье животного</param>
         /// <param name="parLocation">Координаты животного</param>
-        /// <param name="parMaxHealth">Максимальное здоровье животного</param>
-        /// <param name="parDrops">Словарь выпадающих с животного предметов</param>
+        /// <param name="parDrop">Предмет, который животное несет во рту</param>
         /// <param name="parAbleToSit">Возможность сидеть на животном</param>
-        /// <param name="parThingsInSaddleBag">Вещи в седельной сумке</param>
+        /// <param name="parSaddle">Вид седла на лошади</param>
         public Horse(string parName,
             Point parLocation,
-            byte parMaxHealth = MAX_HEALTH,
-            Dictionary<Drop, byte> parDrops = null,
+            byte parHealth = MAX_HEALTH,
+            Drop parDrop = Drop.None,
             bool parAbleToSit = IS_ABLE_TO_SIT,
-            List<Drop> parThingsInSaddleBag = null)
-            : base(parName, parLocation, parMaxHealth, parDrops ?? DefaultDrops, parAbleToSit)
+            Saddle parSaddle = Saddle.None)
+            : base(parName, parLocation, parHealth, parDrop, parAbleToSit)
         {
-            SaddleBag = parThingsInSaddleBag ?? new List<Drop>();
+            Saddle = parSaddle;
+        }
+
+        /// <summary>
+        /// Пустой конструктор
+        /// </summary>
+        public Horse() : base() { }
+
+        /// <summary>
+        /// Конструктор копирования
+        /// </summary>
+        /// <param name="parAnimal">Животное, которое копируется</param>
+        public Horse(Horse parAnimal) : base(parAnimal)
+        {
+            Copy(parAnimal);
         }
 
 
         /// <summary>
-        /// Положить предмет в седельную сумку
+        /// Копировать параметры животного
         /// </summary>
-        /// <param name="parThing">Предмет</param>
-        public void PutThingOnTheSaddleBag( Drop parThing )
+        /// <param name="parAnimal">Животного, параметры которого копируются</param>
+        public override void Copy(Animal parAnimal)
         {
-            SaddleBag.Append(parThing);
+            base.Copy(parAnimal);
+            Saddle = ((Horse)parAnimal).Saddle;
         }
 
         /// <summary>
-        /// Достать предмет из седельной сумки
+        /// Попытка оседлать лошадь
         /// </summary>
-        /// <param name="parThing">Искомый предмет</param>
-        /// <returns>Предмет, который искали, если нашли</returns>
-        public Drop? GetThingFromTheSaddleBag( Drop parThing )
+        /// <returns>Успешность попытки</returns>
+        public bool TryToRide()
         {
-            if (SaddleBag.Contains(parThing))
+            switch (Saddle)
             {
-                SaddleBag.Remove(parThing);
-                return parThing;
+                case Saddle.None: return false;
+                case Saddle.Soft: return true;
+                case Saddle.Hard: return (new Random()).Next(2) == 0;
+                default: return true;
             }
-            return null;
         }
 
     }

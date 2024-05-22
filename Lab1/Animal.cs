@@ -13,10 +13,15 @@ namespace KPO
     public class Animal
     {
         /// <summary>
+        /// Максимальное здоровье животного
+        /// </summary>
+        public const byte MAX_HEALTH = 20;
+
+
+        /// <summary>
         /// Текущий свободный идентификатор для следующего создаваемого животного
         /// </summary>
         private static BigInteger _currentId = 0;
-
 
         /// <summary>
         /// Шкала здоровья животного
@@ -27,84 +32,98 @@ namespace KPO
         /// <summary>
         /// Идентификатор
         /// </summary>
-        public BigInteger ID { get; } = _currentId;
+        public BigInteger ID { get; private set; } = _currentId;
 
         /// <summary>
         /// Имя
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; set; } = "";
 
         /// <summary>
         /// Координаты
         /// </summary>
-        public Point Location { get; private set; }
+        public Point Location { get; set; }
 
         /// <summary>
-        /// Максимальное значение шкалы здоровья животного
-        /// </summary>
-        public byte MaxHealth { get; private set; }
-
-        /// <summary>
-        /// Шкала здоровья животного от 0 до MaxHealth
+        /// Шкала здоровья животного от 0
         /// </summary>
         public byte Health
         {
             get => _health;
-            private set => _health = value < 0 ? (byte)0 : value > MaxHealth ? MaxHealth : value;
+            set => _health = value < 0 ? (byte)0 : value > MAX_HEALTH ? MAX_HEALTH : value;
         }
 
         /// <summary>
-        /// Словарь предметов, выпадающих с животного, и соответствующих им вероятностей выпадения
+        /// Предмет, который животное несет во рту
         /// </summary>
-        public Dictionary<Drop,byte> Drops { get; private set; }
+        public Drop Drop { get; set; }
 
 
         /// <summary>
         /// Конструктор
         /// </summary>
         /// <param name="parName">Имя животного</param>
-        /// <param name="parMaxHealth">Максимальное здоровье животного</param>
+        /// <param name="parHealth">Здоровье животного</param>
         /// <param name="parLocation">Координаты животного</param>
-        /// <param name="parDrops">Словарь выпадающих с животного предметов</param>
-        public Animal( string parName, Point parLocation, Dictionary<Drop, byte> parDrops, byte parMaxHealth)
+        /// <param name="parDrop">Предмет, который животное несет во рту</param>
+        public Animal( string parName, Point parLocation, byte parHealth = MAX_HEALTH, Drop parDrop = Drop.None)
         {
             _currentId++;
             Name = parName;
-            MaxHealth = (byte)Math.Abs(parMaxHealth);
-            Health = MaxHealth;
+            Health = parHealth;
             Location = parLocation;
-            Drops = parDrops;
+            Drop = parDrop;
         }
 
+        /// <summary>
+        /// Пустой конструктор
+        /// </summary>
+        public Animal()
+        {
+            _currentId++;
+        }
+
+        /// <summary>
+        /// Конструктор копирования
+        /// </summary>
+        /// <param name="parAnimal">Животное, которое копируется</param>
+        public Animal(Animal parAnimal)
+        {
+            Copy(parAnimal);
+        }
+
+
+        /// <summary>
+        /// Копировать параметры животного
+        /// </summary>
+        /// <param name="parAnimal">Животного, параметры которого копируются</param>
+        public virtual void Copy(Animal parAnimal)
+        {
+            ID = parAnimal.ID;
+            Name = parAnimal.Name;
+            Location = parAnimal.Location;
+            Health = parAnimal.Health;
+            Drop = parAnimal.Drop;
+        }
     
         /// <summary>
         /// Смерть животного
         /// </summary>
-        /// <returns>Случайный выпадающий предмет</returns>
-        private Drop? ToDie() 
+        /// <returns>Предмет, которое животное несло во рту</returns>
+        private Drop ToDie() 
         {
-            int probability = new Random().Next(Drops.Values.Max());
-            int totalProbability = 0;
-            foreach (var elIDrop in Drops)
-            {
-                totalProbability += elIDrop.Value;
-                if (probability < totalProbability)
-                {
-                    return elIDrop.Key;
-                }
-            }
-            return null;
+            return (new Random()).Next(2) == 0 ? Drop.None : Drop;
         }
 
         /// <summary>
         /// Поранить животное
         /// </summary>
         /// <param name="parDamage">Урон</param>
-        /// <returns>Случайный выпадаемый предмет в случае смерти</returns>
-        public Drop? ToDamage( byte parDamage ) 
+        /// <returns>Предмет, которое животное несло во рту (в случае смерти)</returns>
+        public Drop ToDamage( byte parDamage ) 
         {
             Health -= parDamage;
-            return Health > 0 ? null : ToDie();
+            return Health > 0 ? Drop.None : ToDie();
         }
 
         /// <summary>
@@ -133,7 +152,6 @@ namespace KPO
         {
             ToMove(Location - point);
         }
-
 
     }
 }
