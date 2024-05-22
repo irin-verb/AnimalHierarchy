@@ -1,0 +1,161 @@
+﻿<Window x:Class="Lab3.AnimalForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:hieracy="clr-namespace:KPO;assembly=Lab1"
+        xmlns:local="clr-namespace:Lab3"
+        mc:Ignorable="d"
+        Title="AnimalForm" Height="450" Width="800"
+        WindowStartupLocation="CenterScreen">
+    
+    
+    <Window.Resources>
+        
+        <ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type sys:Enum}" x:Key="DropEnumValues">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="hieracy:Drop"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+
+        <ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type sys:Enum}" x:Key="SaddleEnumValues">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="hieracy:Saddle"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+
+        <local:PointConverter x:Key="PointConverter"/>
+        <local:ByteConverter x:Key="ByteConverter"/>
+
+    </Window.Resources>
+
+
+
+    <Grid Background="PeachPuff">
+
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="8*"/>
+            <RowDefinition Height="8*"/>
+            <RowDefinition Height="2*"/>
+        </Grid.RowDefinitions>
+
+
+        <Grid x:Name="baseElements" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+
+            <Label Content="ID" Grid.Row="0" Margin="0,0,20,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            <Label Content="Имя" Grid.Row="1" Margin="0,0,20,0" HorizontalAlignment="Right" VerticalAlignment="Center" />
+            <Label Content="Здоровье" Grid.Row="2" Margin="0,0,20,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            <Label Content="Предмет" Grid.Row="3" Margin="0,0,20,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            <Label Content="Координаты" Grid.Row="4" Margin="0,0,20,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+
+            <TextBox IsEnabled ="False" Text="{Binding Path=CurrentAnimal.ID, Mode=OneWay}" Grid.Column="1" Margin="20,0,40,0" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" Background="LightGoldenrodYellow"/>
+            <TextBox x:Name="nameTextBox" Text="{Binding Path=CurrentAnimal.Name}" Grid.Column="1" Grid.Row="1" MaxLength="20" Margin="20,0,40,0" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" Background="LightGoldenrodYellow"/>
+            <TextBox x:Name="healthTextBox" Text="{Binding Path=CurrentAnimal.Health, Converter={StaticResource ByteConverter}}" Grid.Column="1" Grid.Row="2" MaxLength="3" Margin="20,0,40,0" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" PreviewTextInput="PosInteger_PreviewTextInput" Background="LightGoldenrodYellow"/>
+            <ComboBox SelectedItem="{Binding Path=CurrentAnimal.Drop}" ItemsSource="{Binding Source={StaticResource DropEnumValues}}" Grid.Column="1" Grid.Row="3" Margin="20,0,40,0" Grid.ColumnSpan="3" HorizontalAlignment="Stretch" VerticalAlignment="Center" Background="LightGoldenrodYellow"/>
+            <TextBox x:Name="coordinatesTextBox" Grid.Column="1" Grid.Row="4" MaxLength="20" Text="{Binding Path=CurrentAnimal.Location, Converter={StaticResource PointConverter}}"  Margin="20,0,40,0" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" PreviewTextInput="Coordinates_PreviewTextInput" Background="LightGoldenrodYellow"/>
+        </Grid>
+
+
+        <Grid x:Name="additionalElements" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="5">
+
+            <Grid Grid.RowSpan="4" Grid.ColumnSpan="2" x:Name="cowElements" Visibility="Collapsed">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
+                <Label Content="Возможно сидеть" Grid.Row="0" Margin="0,0,20,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <Label Content="Счастье" Grid.Row="1" Margin="0,0,20,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <Label Content="Молоко" Grid.Row="2" Margin="0,0,20,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <CheckBox IsChecked="{Binding Path=CurrentAnimal.IsAbleToSit}" Grid.Column="1" Margin="20,0,40,0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Background="LightGoldenrodYellow"></CheckBox>
+                <TextBox x:Name="happinessTextBox" MaxLength="3" Text="{Binding Path=CurrentAnimal.Happyness}" Grid.Column="1" Grid.Row="1" Margin="20,0,40,0" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" PreviewTextInput="PosInteger_PreviewTextInput" Background="LightGoldenrodYellow"/>
+                <TextBox x:Name="milkTextBox" MaxLength="3" Text="{Binding Path=CurrentAnimal.LitersOfMilk}" Grid.Column="1" Grid.Row="2" Margin="20,0,40,0" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" PreviewTextInput="PosInteger_PreviewTextInput" Background="LightGoldenrodYellow"/>
+            </Grid>
+
+            <Grid Grid.RowSpan="4" Grid.ColumnSpan="2" x:Name="horseElements" Visibility="Collapsed">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
+                <Label Content="Возможно сидеть" Grid.Row="0" Margin="0,0,20,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <Label Content="Счастье" Grid.Row="1" Margin="0,0,20,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <Label Content="Седло" Grid.Row="2" Margin="0,0,20,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <CheckBox IsChecked="{Binding Path=CurrentAnimal.IsAbleToSit}" Grid.Column="1" Margin="20,0,40,0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Background="LightGoldenrodYellow"></CheckBox>
+                <TextBox x:Name="happynessTextBox" MaxLength="3" Text="{Binding Path=CurrentAnimal.Happyness}" Grid.Column="1" Grid.Row="1" Margin="20,0,40,0" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" PreviewTextInput="PosInteger_PreviewTextInput" Background="LightGoldenrodYellow"/>
+                <ComboBox SelectedItem="{Binding Path=CurrentAnimal.Saddle}" ItemsSource="{Binding Source={StaticResource SaddleEnumValues}}" Grid.Column="1" Grid.Row="2" Margin="20,0,40,0" Grid.ColumnSpan="3" HorizontalAlignment="Stretch" VerticalAlignment="Center" Background="LightGoldenrodYellow"/>
+            </Grid>
+
+            <Grid Grid.RowSpan="4" Grid.ColumnSpan="2" x:Name="wolfElements" Visibility="Collapsed">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
+                <Label Content="Сила укуса" Grid.Row="0" Margin="0,0,20,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <Label Content="Имя хозяина" Grid.Row="1" Margin="0,0,20,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <TextBox x:Name="biteDamageTextBox" MaxLength="3" Text="{Binding Path=CurrentAnimal.BiteDamage}" Grid.Column="1" Margin="20,0,40,0" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" PreviewTextInput="PosInteger_PreviewTextInput" Background="LightGoldenrodYellow"/>
+                <TextBox x:Name="ownerNameTextBox" MaxLength="20" Text="{Binding Path=CurrentAnimal.OwnerName}" Grid.Column="1" Grid.Row="1" Margin="20,0,40,0" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" Background="LightGoldenrodYellow"/>
+            </Grid>
+
+            <Grid Grid.RowSpan="4" Grid.ColumnSpan="2" x:Name="dolphinElements" Visibility="Collapsed">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
+                <Label Content="Сила укуса" Grid.Row="0" Margin="0,0,20,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <Label Content="Координаты сокровища" Grid.Row="1" Margin="0,0,20,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <TextBox x:Name="byteDamageTextBox" MaxLength="3" Text="{Binding Path=CurrentAnimal.BiteDamage}" Grid.Column="1" Margin="20,0,40,0" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center"  PreviewTextInput="PosInteger_PreviewTextInput" Background="LightGoldenrodYellow"/>
+                <TextBox x:Name="treasureCoordinatesTextBox" Grid.Column="1" Grid.Row="1" MaxLength="20" Text="{Binding Path=CurrentAnimal.TreasureLocation, Converter={StaticResource PointConverter}}"  Margin="20,0,40,0" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" PreviewTextInput="Coordinates_PreviewTextInput" Background="LightGoldenrodYellow"/>
+            </Grid>
+            
+        </Grid>
+
+
+        <Button x:Name="acceptButton" Grid.Column="1" Margin="15,5,15,5" Content="Кнопка" FontWeight="Bold" Background="LightSalmon"  HorizontalAlignment="Stretch" Grid.Row="2" VerticalAlignment="Stretch" Click="AcceptButton_Click"/>
+        <Button x:Name="cancelButton" Grid.Column="3" Margin="15,5,15,5" Content="Отмена" FontWeight="Bold" Background="LightSalmon"  HorizontalAlignment="Stretch" Grid.Row="2" VerticalAlignment="Stretch" Click="CancelButton_Click"/>
+
+
+    </Grid>
+</Window>
