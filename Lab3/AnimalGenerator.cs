@@ -108,36 +108,6 @@ namespace Lab3
         }
 
         /// <summary>
-        /// Сгенерировать случайное животное
-        /// </summary>
-        /// <returns>Случайное животное</returns>
-        public static Animal GenerateAnimal()
-        {
-            Update();
-            return new Animal(Name, Point, Health, Drop);
-        }
-
-        /// <summary>
-        /// Сгенерировать случайное дружелюбное животное
-        /// </summary>
-        /// <returns>Случайное дружелюбное животное</returns>
-        public static FriendlyAnimal GenerateFriendlyAnimal()
-        {
-            Update();
-            return new FriendlyAnimal(Name, Point, Health, Drop, IsAbleToSit);
-        }
-
-        /// <summary>
-        /// Сгенерировать случайное нейтральное животное
-        /// </summary>
-        /// <returns>Случайное нейтральное жиыотное</returns>
-        public static NeutralAnimal GenerateNeutralAnimal()
-        {
-            Update();
-            return new NeutralAnimal(Name, Point, Health, Drop, BiteDamage);
-        }
-
-        /// <summary>
         /// Сгенерировать случайную корову
         /// </summary>
         /// <returns>Случайная корова</returns>

@@ -93,7 +93,7 @@ namespace Lab3
         /// <param name="e">Данные события, связанные с кликом</param>
         private void ButtonDelete_Click(object sender, RoutedEventArgs e)
         {
-            Animal selectedAnimal = (Animal)animalsGrid.SelectedItem;
+            Animal selectedAnimal = (Animal)GridAnimals.SelectedItem;
             if (selectedAnimal != null)
             {
                 if (new AnimalForm(selectedAnimal, AnimalFormRegime.Delete).ShowDialog() == true)
@@ -108,7 +108,7 @@ namespace Lab3
         /// <param name="e">Данные события, связанные с кликом</param>
         private void ButtonEdit_Click(object sender, RoutedEventArgs e)
         {
-            Animal selectedAnimal = (Animal)animalsGrid.SelectedItem;
+            Animal selectedAnimal = (Animal)GridAnimals.SelectedItem;
             if (selectedAnimal != null)
             {
                 Animal copiedAnimal;
@@ -118,11 +118,11 @@ namespace Lab3
                     case Type t when t == typeof(Horse): copiedAnimal = new Horse((Horse)selectedAnimal); break;
                     case Type t when t == typeof(Wolf): copiedAnimal = new Wolf((Wolf)selectedAnimal); break;
                     case Type t when t == typeof(Dolphin): copiedAnimal = new Dolphin((Dolphin)selectedAnimal); break;
-                    default: copiedAnimal = new Animal(selectedAnimal); break;
+                    default: copiedAnimal = new Cow((Cow)selectedAnimal); break;
                 }
                 if (new AnimalForm(copiedAnimal, AnimalFormRegime.Edit).ShowDialog() == true)
                     selectedAnimal.Copy(copiedAnimal);
-                    animalsGrid.Items.Refresh();
+                    GridAnimals.Items.Refresh();
             }
         }
 
@@ -147,11 +147,11 @@ namespace Lab3
         /// <param name="e">Данные события, связанные с изменением выделения</param>
         private void animalsGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            bool itemSelected = animalsGrid.SelectedItem != null;
-            editButton.IsEnabled = itemSelected;
-            editContextButton.IsEnabled = itemSelected;
-            deleteButton.IsEnabled = itemSelected;
-            deleteContextButton.IsEnabled = itemSelected;
+            bool itemSelected = GridAnimals.SelectedItem != null;
+            ButtonEdit.IsEnabled = itemSelected;
+            ContextButtonEdit.IsEnabled = itemSelected;
+            ButtonDelete.IsEnabled = itemSelected;
+            ContextButtonDelete.IsEnabled = itemSelected;
         }
     }
 }
