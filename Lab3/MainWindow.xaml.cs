@@ -28,14 +28,25 @@ namespace Lab3
         /// </summary>
         public ObservableCollection<Animal> Animals { get; set; }
 
+        /// <summary>
+        /// Коллекция для хранения всех созданных фабрик
+        /// </summary>
         public ObservableCollection<IAnimalFactory> Factories { get; set; }
 
+        /// <summary>
+        /// Фабричный метод создания абстрактной фабрики, создающей волков и лошадей
+        /// </summary>
         public WolfAndHorseFactoryMethod WolfAndHorseFactoryMethod { get; set; }
 
+        /// <summary>
+        /// Фабричный метод создания абстрактной фабрики, создающей дельфинов и коров
+        /// </summary>
         public DolphinAndCowFactoryMethod DolphinAndCowFactoryMethod { get; set; }
 
+        /// <summary>
+        /// Фабричный метод создания фабрики прототипов, создающей нейтральных и дружелюбных животных
+        /// </summary>
         public PrototypeAnimalFactoryMethod PrototypeAnimalFactoryMethod { get; set; }
-
 
 
         /// <summary>
@@ -49,6 +60,9 @@ namespace Lab3
             DataContext = this;
         }
 
+        /// <summary>
+        /// Инициализация фабрик
+        /// </summary>
         private void InitializeFactories()
         {
             Factories = new ObservableCollection<IAnimalFactory>();
@@ -67,6 +81,12 @@ namespace Lab3
             Factories.Add(PrototypeAnimalFactoryMethod.CreateAnimalFactory());
 
         }
+
+        /// <summary>
+        /// Создать дружелюбное животное
+        /// </summary>
+        /// <param name="sender">Объект, инициировавший событие</param>
+        /// <param name="e">Данные события, связанные с кликом</param>
         private void ButtonAddFriendlyAnimal_Click(object sender, RoutedEventArgs e)
         {
             FriendlyAnimal friendlyAnimal = ((IAnimalFactory)ComboBoxFactories.SelectedItem).CreateFriendlyAnimal();
@@ -74,6 +94,11 @@ namespace Lab3
                 Animals.Add(friendlyAnimal);
         }
 
+        /// <summary>
+        /// Создать нейтральное животное
+        /// </summary>
+        /// <param name="sender">Объект, инициировавший событие</param>
+        /// <param name="e">Данные события, связанные с кликом</param>
         private void ButtonAddNeutralAnimal_Click(object sender, RoutedEventArgs e)
         {
             NeutralAnimal neutralAnimal = ((IAnimalFactory)ComboBoxFactories.SelectedItem).CreateNeutralAnimal();
@@ -172,7 +197,7 @@ namespace Lab3
         }
 
         /// <summary>
-        /// Создание и добавление случайной коровы, лошади, волка и дельфина
+        /// Создание и добавление случайных коровы, лошади, волка и дельфина
         /// </summary>
         /// <param name="sender">Объект, инициировавший событие</param>
         /// <param name="e">Данные события, связанные с кликом</param>

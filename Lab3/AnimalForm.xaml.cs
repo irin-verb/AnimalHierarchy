@@ -92,8 +92,7 @@ namespace Lab3
                         ButtonAccept.Content = "Добавить прототип";
                         Title = "Создание прототипа";
                         break;
-                    }
-                    
+                    } 
 
             }
         }
