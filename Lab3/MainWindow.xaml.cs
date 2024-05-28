@@ -13,6 +13,8 @@ using System.Windows.Shapes;
 using KPO;
 using System.Numerics;
 using System.Runtime.Serialization;
+using Lab4.EntitiesCreation;
+using Lab4.FactoriesCreation;
 
 namespace Lab3
 {
@@ -26,6 +28,15 @@ namespace Lab3
         /// </summary>
         public ObservableCollection<Animal> Animals { get; set; }
 
+        public ObservableCollection<IAnimalFactory> Factories { get; set; }
+
+        public WolfAndHorseFactoryMethod WolfAndHorseFactoryMethod { get; set; }
+
+        public DolphinAndCowFactoryMethod DolphinAndCowFactoryMethod { get; set; }
+
+        public PrototypeAnimalFactoryMethod PrototypeAnimalFactoryMethod { get; set; }
+
+
 
         /// <summary>
         /// Конструктор формы
@@ -33,10 +44,42 @@ namespace Lab3
         public MainWindow()
         {
             InitializeComponent();
-            Animals = new ObservableCollection<Animal> {};
+            Animals = new ObservableCollection<Animal>();
+            InitializeFactories();
             DataContext = this;
         }
 
+        private void InitializeFactories()
+        {
+            Factories = new ObservableCollection<IAnimalFactory>();
+            WolfAndHorseFactoryMethod = new WolfAndHorseFactoryMethod();
+            DolphinAndCowFactoryMethod = new DolphinAndCowFactoryMethod();
+
+            NeutralAnimal neutralAnimalPrototype = new NeutralAnimal();
+            FriendlyAnimal friendlyAnimalPrototype = new FriendlyAnimal();
+
+            new AnimalForm(neutralAnimalPrototype, AnimalFormRegime.PrototypeCreating).ShowDialog();
+            new AnimalForm(friendlyAnimalPrototype, AnimalFormRegime.PrototypeCreating).ShowDialog();
+            PrototypeAnimalFactoryMethod = new PrototypeAnimalFactoryMethod(neutralAnimalPrototype, friendlyAnimalPrototype);
+       
+            Factories.Add(WolfAndHorseFactoryMethod.CreateAnimalFactory());
+            Factories.Add(DolphinAndCowFactoryMethod.CreateAnimalFactory());
+            Factories.Add(PrototypeAnimalFactoryMethod.CreateAnimalFactory());
+
+        }
+        private void ButtonAddFriendlyAnimal_Click(object sender, RoutedEventArgs e)
+        {
+            FriendlyAnimal friendlyAnimal = ((IAnimalFactory)ComboBoxFactories.SelectedItem).CreateFriendlyAnimal();
+            if (new AnimalForm(friendlyAnimal, AnimalFormRegime.Add).ShowDialog() == true)
+                Animals.Add(friendlyAnimal);
+        }
+
+        private void ButtonAddNeutralAnimal_Click(object sender, RoutedEventArgs e)
+        {
+            NeutralAnimal neutralAnimal = ((IAnimalFactory)ComboBoxFactories.SelectedItem).CreateNeutralAnimal();
+            if (new AnimalForm(neutralAnimal, AnimalFormRegime.Add).ShowDialog() == true)
+                Animals.Add(neutralAnimal);
+        }
 
         /// <summary>
         /// Создать дельфина
@@ -118,7 +161,9 @@ namespace Lab3
                     case Type t when t == typeof(Horse): copiedAnimal = new Horse((Horse)selectedAnimal); break;
                     case Type t when t == typeof(Wolf): copiedAnimal = new Wolf((Wolf)selectedAnimal); break;
                     case Type t when t == typeof(Dolphin): copiedAnimal = new Dolphin((Dolphin)selectedAnimal); break;
-                    default: copiedAnimal = new Cow((Cow)selectedAnimal); break;
+                    case Type t when t == typeof(NeutralAnimal): copiedAnimal = new NeutralAnimal((NeutralAnimal)selectedAnimal); break;
+                    case Type t when t == typeof(FriendlyAnimal): copiedAnimal = new FriendlyAnimal((FriendlyAnimal)selectedAnimal); break;
+                    default: copiedAnimal = null; break;
                 }
                 if (new AnimalForm(copiedAnimal, AnimalFormRegime.Edit).ShowDialog() == true)
                     selectedAnimal.Copy(copiedAnimal);
@@ -153,5 +198,6 @@ namespace Lab3
             ButtonDelete.IsEnabled = itemSelected;
             ContextButtonDelete.IsEnabled = itemSelected;
         }
+
     }
 }

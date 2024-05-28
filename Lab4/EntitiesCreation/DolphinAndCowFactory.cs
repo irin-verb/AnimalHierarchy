@@ -18,5 +18,10 @@ namespace Lab4.EntitiesCreation
         {
             return new Dolphin();
         }
+
+        public override string ToString()
+        {
+            return "Дельфин и корова";
+        }
     }
 }

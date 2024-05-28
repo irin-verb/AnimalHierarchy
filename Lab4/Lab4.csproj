@@ -11,8 +11,4 @@
     <ProjectReference Include="..\Lab1\Lab1.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="PrototypeFactory\" />
-  </ItemGroup>
-
 </Project>

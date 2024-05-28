@@ -55,12 +55,23 @@ namespace Lab3
         /// </summary>
         private void UpdateComponent()
         {
-            switch (CurrentAnimal.GetType())
-            {
-                case Type t when t == typeof(Cow): GridCowProperties.Visibility = Visibility.Visible; break;
-                case Type t when t == typeof(Horse): GridHorseProperties.Visibility = Visibility.Visible; break;
-                case Type t when t == typeof(Wolf): GridWolfProperties.Visibility = Visibility.Visible; break;
-                case Type t when t == typeof(Dolphin): GridDolphinProperties.Visibility = Visibility.Visible; break;
+            switch (CurrentAnimal)
+            { 
+                case NeutralAnimal _:
+                    {
+                        GridNeutralAnimalProperties.Visibility = Visibility.Visible;
+                        if (CurrentAnimal is Wolf) GridWolfProperties.Visibility = Visibility.Visible;
+                        if (CurrentAnimal is Dolphin) GridDolphinProperties.Visibility = Visibility.Visible;
+                        break;
+                    }
+                    
+                case FriendlyAnimal _:
+                    {
+                        GridFriendlyAnimalProperties.Visibility = Visibility.Visible;
+                        if (CurrentAnimal is Cow) GridCowProperties.Visibility = Visibility.Visible;
+                        if (CurrentAnimal is Horse) GridHorseProperties.Visibility = Visibility.Visible;
+                        break;
+                    }
             }
             switch (Regime) 
             {
@@ -69,11 +80,21 @@ namespace Lab3
                 case AnimalFormRegime.Delete:
                     {
                         GridAnimalProperties.IsEnabled = false;
-                        GridAnimalChildrenProperties.IsEnabled = false;
+                        GridNeutralAndFriendAnimalProperties.IsEnabled = false;
+                        GridCowWolfHorseDolphinProperties.IsEnabled = false;
                         ButtonAccept.Content = "Удалить";
                         Title = "Удаление";
                         break;
-                    }   
+                    }
+                case AnimalFormRegime.PrototypeCreating:
+                    {
+                        ButtonCancel.IsEnabled = false;
+                        ButtonAccept.Content = "Добавить прототип";
+                        Title = "Создание прототипа";
+                        break;
+                    }
+                    
+
             }
         }
 
@@ -135,37 +156,29 @@ namespace Lab3
                 MessageBox.Show("Координаты - это два целых числа, записанных через запятую (например, '100,-100')", "У вас ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
             else
             {
-                switch (CurrentAnimal.GetType())
+                switch (CurrentAnimal)
                 {
-                    case Type t when t == typeof(Cow):
+                    case NeutralAnimal _:
+                        {
+                            if (byteConv.ConvertBack(TextBoxBiteDamage.Text, typeof(byte), null, CultureInfo.InvariantCulture) == DependencyProperty.UnsetValue)
+                                MessageBox.Show($"Сила укуса - это целое положительное число до {NeutralAnimal.MAX_BITE_DAMAGE}", "У вас ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+                            else if (CurrentAnimal is Wolf && string.IsNullOrWhiteSpace(TextBoxOwnerName.Text))
+                                MessageBox.Show($"Имя хозина - какой-то набор символов, а не пустая строка или пробелы", "У вас ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+                            else if (CurrentAnimal is Dolphin && pointConv.ConvertBack(TextBoxTreasureCoordinates.Text, typeof(Point), null, CultureInfo.InvariantCulture) == DependencyProperty.UnsetValue)
+                                MessageBox.Show("Координаты - это два целых числа, записанных через запятую (например, '100,-100')", "У вас ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+                            else
+                            {
+                                this.DialogResult = true;
+                                this.Close();
+                            }
+                            break;
+                        }
+                    case FriendlyAnimal _:
                         {
                             if (byteConv.ConvertBack(TextBoxHappiness.Text, typeof(byte), null, CultureInfo.InvariantCulture) == DependencyProperty.UnsetValue)
                                 MessageBox.Show($"Счастье - это целое положительное число до 255", "У вас ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
-                            else if (byteConv.ConvertBack(TextBoxMilk.Text, typeof(byte), null, CultureInfo.InvariantCulture) == DependencyProperty.UnsetValue)
+                            else if (CurrentAnimal is Cow && byteConv.ConvertBack(TextBoxMilk.Text, typeof(byte), null, CultureInfo.InvariantCulture) == DependencyProperty.UnsetValue)
                                 MessageBox.Show($"Молоко - это целое положительное число до {Cow.MAX_MILK_LITERS}", "У вас ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
-                            else {
-                                this.DialogResult = true;
-                                this.Close();
-                            }
-                            break;
-                        }
-                    case Type t when t == typeof(Horse):
-                        {
-                            if (byteConv.ConvertBack(TextBoxHappyness.Text, typeof(byte), null, CultureInfo.InvariantCulture) == DependencyProperty.UnsetValue)
-                                MessageBox.Show($"Счастье - это целое положительное число до 255", "У вас ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
-                            else
-                            {
-                                this.DialogResult = true;
-                                this.Close();
-                            }
-                            break; 
-                        }
-                    case Type t when t == typeof(Wolf):
-                        {
-                            if (string.IsNullOrWhiteSpace(TextBoxOwnerName.Text))
-                                MessageBox.Show($"Имя хозина - какой-то набор символов, а не пустая строка или пробелы", "У вас ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
-                            else if (byteConv.ConvertBack(TextBoxBiteDamage.Text, typeof(byte), null, CultureInfo.InvariantCulture) == DependencyProperty.UnsetValue)
-                                MessageBox.Show($"Сила укуса - это целое положительное число до {NeutralAnimal.MAX_BITE_DAMAGE}", "У вас ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
                             else
                             {
                                 this.DialogResult = true;
@@ -173,19 +186,7 @@ namespace Lab3
                             }
                             break;
                         }
-                    case Type t when t == typeof(Dolphin):
-                        {
-                            if (pointConv.ConvertBack(TextBoxTreasureCoordinates.Text, typeof(Point), null, CultureInfo.InvariantCulture) == DependencyProperty.UnsetValue)
-                                MessageBox.Show("Координаты - это два целых числа, записанных через запятую (например, '100,-100')", "У вас ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
-                            else if (byteConv.ConvertBack(TextBoxByteDamage.Text, typeof(byte), null, CultureInfo.InvariantCulture) == DependencyProperty.UnsetValue)
-                                MessageBox.Show($"Сила укуса - это целое положительное число до {NeutralAnimal.MAX_BITE_DAMAGE}", "У вас ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
-                            else
-                            {
-                                this.DialogResult = true;
-                                this.Close();
-                            }
-                            break;
-                        }
+                   
                 }
             }
         }

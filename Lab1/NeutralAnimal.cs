@@ -7,7 +7,7 @@ namespace KPO
     /// <summary>
     /// Нейтральное животное
     /// </summary>
-    public abstract class NeutralAnimal: Animal
+    public class NeutralAnimal: Animal
     {
         /// <summary>
         /// Максимальная сила укуса животного
@@ -79,6 +79,9 @@ namespace KPO
             return parVictim.ToDamage(BiteDamage);
         }
 
-
+        public override object Clone()
+        {
+            return new NeutralAnimal(this);
+        }
     }
 }

@@ -18,5 +18,10 @@ namespace Lab4.EntitiesCreation
         {
             return new Wolf();
         }
+
+        public override string ToString()
+        {
+            return "Волк и лошадь";
+        }
     }
 }

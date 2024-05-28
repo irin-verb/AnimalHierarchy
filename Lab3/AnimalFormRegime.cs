@@ -22,6 +22,10 @@ namespace Lab3
         /// <summary>
         /// Удаление животного
         /// </summary>
-        Delete
+        Delete,
+        /// <summary>
+        /// Создание прототипа животного
+        /// </summary>
+        PrototypeCreating
     }
 }

@@ -19,12 +19,17 @@ namespace Lab4.EntitiesCreation
 
         public FriendlyAnimal CreateFriendlyAnimal()
         {
-            return (FriendlyAnimal)_neutralAnimal.Clone();
+            return (FriendlyAnimal)_friendlyAnimal.Clone();
         }
 
         public NeutralAnimal CreateNeutralAnimal()
         {
-            return (NeutralAnimal)_friendlyAnimal.Clone();
+            return (NeutralAnimal)_neutralAnimal.Clone();
+        }
+
+        public override string ToString() 
+        {
+            return "Прототип";
         }
     }
 }

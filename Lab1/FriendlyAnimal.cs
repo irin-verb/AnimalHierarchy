@@ -10,7 +10,7 @@ namespace KPO
     /// <summary>
     /// Дружелюбное животное
     /// </summary>
-    public abstract class FriendlyAnimal : Animal
+    public class FriendlyAnimal : Animal
     {
         /// <summary>
         /// Возможность сидеть по умолчанию
@@ -87,6 +87,11 @@ namespace KPO
         {
             ++Happyness;
             return Happyness;
+        }
+
+        public override object Clone()
+        {
+            return new FriendlyAnimal(this);
         }
     }
 }
