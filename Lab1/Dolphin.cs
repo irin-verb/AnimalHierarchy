@@ -78,6 +78,15 @@ namespace KPO
         }
 
         /// <summary>
+        /// Клонировать объект
+        /// </summary>
+        /// <returns>Клон объекта</returns>
+        public override object Clone()
+        {
+            return new Dolphin(this);
+        }
+
+        /// <summary>
         /// Переплыть в место, ближайшее к окружности вокруг сокровища
         /// </summary>
         private void MoveToTheCircle()

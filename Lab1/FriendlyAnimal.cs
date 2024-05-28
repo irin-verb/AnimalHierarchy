@@ -10,7 +10,7 @@ namespace KPO
     /// <summary>
     /// Дружелюбное животное
     /// </summary>
-    public class FriendlyAnimal : Animal
+    public abstract class FriendlyAnimal : Animal
     {
         /// <summary>
         /// Возможность сидеть по умолчанию

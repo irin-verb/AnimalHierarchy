@@ -62,6 +62,15 @@ namespace KPO
         }
 
         /// <summary>
+        /// Клонировать объект
+        /// </summary>
+        /// <returns>Клон объекта</returns>
+        public override object Clone()
+        {
+            return new Horse(this);
+        }
+
+        /// <summary>
         /// Попытка оседлать лошадь
         /// </summary>
         /// <returns>Успешность попытки</returns>

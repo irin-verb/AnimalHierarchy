@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Lab4.EntitiesCreation.AbstractAnimalFactory" Collapsed="true">
+    <Position X="1.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EntitiesCreation\AbstractAnimalFactory.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Lab4.EntitiesCreation.DolphinAndCowFactory" Collapsed="true">
+    <Position X="0.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EntitiesCreation\DolphinAndCowFactory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Lab4.EntitiesCreation.PrototypeAnimalFactory" Collapsed="true">
+    <Position X="3.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAAAAAAAQAACAAAAAEAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EntitiesCreation\PrototypeAnimalFactory.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Lab4.EntitiesCreation.WolfAndHorseFactory" Collapsed="true">
+    <Position X="2.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EntitiesCreation\WolfAndHorseFactory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Lab4.FactoriesCreation.AnimalFactoryMethod" Collapsed="true">
+    <Position X="5.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FactoriesCreation\AnimalFactoryMethod.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Lab4.FactoriesCreation.PrototypeAnimalFactoryMethod" Collapsed="true">
+    <Position X="7.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAABQAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FactoriesCreation\PrototypeAnimalFactoryMethod.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Lab4.FactoriesCreation.DolphinAndCowFactoryMethod" Collapsed="true">
+    <Position X="3.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FactoriesCreation\DolphinAndCowFactoryMethod.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Lab4.FactoriesCreation.WolfAndHorseFactoryMethod" Collapsed="true">
+    <Position X="5.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FactoriesCreation\WolfAndHorseFactoryMethod.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="Lab4.EntitiesCreation.IAnimalFactory" Collapsed="true">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EntitiesCreation\IAnimalFactory.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

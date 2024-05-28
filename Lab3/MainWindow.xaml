@@ -7,7 +7,7 @@
         xmlns:hieracy="clr-namespace:KPO;assembly=Lab1"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
+        Title="Список животных" Height="450" Width="800"
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type sys:Enum}" x:Key="DropEnumValues">

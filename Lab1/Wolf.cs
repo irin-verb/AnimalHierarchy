@@ -62,6 +62,15 @@ namespace KPO
         }
 
         /// <summary>
+        /// Клонировать объект
+        /// </summary>
+        /// <returns>Клон объекта</returns>
+        public override object Clone()
+        {
+            return new Wolf(this);
+        }
+
+        /// <summary>
         /// Охотиться
         /// </summary>
         /// <param name="parAnimals">Список животных для охоты</param>

@@ -7,7 +7,7 @@ namespace KPO
     /// <summary>
     /// Нейтральное животное
     /// </summary>
-    public class NeutralAnimal: Animal
+    public abstract class NeutralAnimal: Animal
     {
         /// <summary>
         /// Максимальная сила укуса животного
