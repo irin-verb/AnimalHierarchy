@@ -7,7 +7,7 @@
         xmlns:hieracy="clr-namespace:KPO;assembly=Lab1"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
+        Title="Список животных" Height="450" Width="800"
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type sys:Enum}" x:Key="DropEnumValues">
@@ -30,36 +30,23 @@
             <RowDefinition Height="1*"/>
             <RowDefinition Height="9*"/>
         </Grid.RowDefinitions>
-        <Button Grid.Column="0" FontWeight="Bold" Background="LightSalmon" Click="ButtonAddWolf_Click">
+        <ComboBox x:Name="ComboBoxFactories" SelectedIndex="0" ItemsSource="{Binding Factories}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.ColumnSpan="2"/>
+        <Button Grid.Column="3" FontWeight="Bold" Background="LightSalmon" Click="ButtonAddFriendlyAnimal_Click">
             <Button.Content>
                 <TextBlock TextWrapping="Wrap">
-                    Добавить волка
+                    Дружелюбное животное
                 </TextBlock>
             </Button.Content>
         </Button>
-        <Button Grid.Column="1" FontWeight="Bold" Background="LightSalmon" Click="ButtonAddDolphin_Click">
+        <Button Grid.Column="2" FontWeight="Bold" Background="LightSalmon" Click="ButtonAddNeutralAnimal_Click">
             <Button.Content>
                 <TextBlock TextWrapping="Wrap">
-                    Добавить дельфина
+                    Нейтральное животное
                 </TextBlock>
             </Button.Content>
         </Button>
-        <Button Grid.Column="2" FontWeight="Bold" Background="LightSalmon" Click="ButtonAddCow_Click">
-            <Button.Content>
-                <TextBlock TextWrapping="Wrap">
-                    Добавить корову
-                </TextBlock>
-            </Button.Content>
-        </Button>
-        <Button Grid.Column="3" FontWeight="Bold" Background="LightSalmon" Click="ButtonAddHourse_Click">
-            <Button.Content>
-                <TextBlock TextWrapping="Wrap">
-                    Добавить лошадь
-                </TextBlock>
-            </Button.Content>
-        </Button>
-        <Button x:Name="editButton" Content="Изменить" IsEnabled = "False" Grid.Column="4" FontWeight="Bold" Background="LightSalmon" Click="ButtonEdit_Click"/>
-        <Button x:Name="deleteButton" Content="Удалить" IsEnabled = "False" Grid.Column="5" FontWeight="Bold" Background="LightSalmon" Click="ButtonDelete_Click"/>
+        <Button x:Name="ButtonEdit" Content="Изменить" IsEnabled = "False" Grid.Column="4" FontWeight="Bold" Background="LightSalmon" Click="ButtonEdit_Click"/>
+        <Button x:Name="ButtonDelete" Content="Удалить" IsEnabled = "False" Grid.Column="5" FontWeight="Bold" Background="LightSalmon" Click="ButtonDelete_Click"/>
         <Button Grid.Column="6" FontWeight="Bold" Background="LightSalmon" Click="ButtonGenerateAnimals_Click">
             <Button.Content>
                 <TextBlock TextWrapping="Wrap">
@@ -67,7 +54,7 @@
                 </TextBlock>
             </Button.Content>
         </Button>
-        <DataGrid x:Name="animalsGrid" SelectionMode="Single"  ItemsSource="{Binding Animals}" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="7" AutoGenerateColumns="False" RowBackground="LightGoldenrodYellow" AlternatingRowBackground="Bisque" Background="PeachPuff" IsReadOnly="True" SelectionChanged="animalsGrid_SelectionChanged">
+        <DataGrid x:Name="GridAnimals" SelectionMode="Single"  ItemsSource="{Binding Animals}" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="7" AutoGenerateColumns="False" RowBackground="LightGoldenrodYellow" AlternatingRowBackground="Bisque" Background="PeachPuff" IsReadOnly="True" SelectionChanged="animalsGrid_SelectionChanged">
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Создать">
@@ -76,13 +63,13 @@
                         <MenuItem Header="Корова" Click="ButtonAddCow_Click"/>
                         <MenuItem Header="Лошадь" Click="ButtonAddHourse_Click"/>
                     </MenuItem>
-                    <MenuItem x:Name="deleteContextButton" Header="Удалить" IsEnabled = "False" Click="ButtonDelete_Click"/>
-                    <MenuItem x:Name="editContextButton" Header="Изменить" IsEnabled = "False" Click="ButtonEdit_Click"/>
+                    <MenuItem x:Name="ContextButtonDelete" Header="Удалить" IsEnabled = "False" Click="ButtonDelete_Click"/>
+                    <MenuItem x:Name="ContextButtonEdit" Header="Изменить" IsEnabled = "False" Click="ButtonEdit_Click"/>
                     <MenuItem Header="Генерировать животных" Click="ButtonGenerateAnimals_Click"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Binding="{Binding Path=ID}" Width="80" />
+                <DataGridTextColumn Header="ID" Binding="{Binding Path=ID}" Width="*" />
                 <DataGridTextColumn Header="Имя" Binding="{Binding Path=Name}" Width="*" />
                 <DataGridTextColumn Header="Расположение" Binding="{Binding Path=Location}" Width="*" CanUserResize="True"/>
                 <DataGridTextColumn Header="Здоровье" Binding="{Binding Path=Health}" Width="*" CanUserResize="True"/>

@@ -79,6 +79,15 @@ namespace KPO
         }
 
         /// <summary>
+        /// Клонировать объект
+        /// </summary>
+        /// <returns>Клон объекта</returns>
+        public override object Clone()
+        {
+            return new Cow(this);
+        }
+
+        /// <summary>
         /// Покормить корову
         /// </summary>
         /// <param name="parSatiety">Сытность еды</param>

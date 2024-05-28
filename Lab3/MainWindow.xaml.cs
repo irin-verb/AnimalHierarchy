@@ -13,6 +13,8 @@ using System.Windows.Shapes;
 using KPO;
 using System.Numerics;
 using System.Runtime.Serialization;
+using Lab4.EntitiesCreation;
+using Lab4.FactoriesCreation;
 
 namespace Lab3
 {
@@ -26,6 +28,26 @@ namespace Lab3
         /// </summary>
         public ObservableCollection<Animal> Animals { get; set; }
 
+        /// <summary>
+        /// Коллекция для хранения всех созданных фабрик
+        /// </summary>
+        public ObservableCollection<IAnimalFactory> Factories { get; set; }
+
+        /// <summary>
+        /// Фабричный метод создания абстрактной фабрики, создающей волков и лошадей
+        /// </summary>
+        public WolfAndHorseFactoryMethod WolfAndHorseFactoryMethod { get; set; }
+
+        /// <summary>
+        /// Фабричный метод создания абстрактной фабрики, создающей дельфинов и коров
+        /// </summary>
+        public DolphinAndCowFactoryMethod DolphinAndCowFactoryMethod { get; set; }
+
+        /// <summary>
+        /// Фабричный метод создания фабрики прототипов, создающей нейтральных и дружелюбных животных
+        /// </summary>
+        public PrototypeAnimalFactoryMethod PrototypeAnimalFactoryMethod { get; set; }
+
 
         /// <summary>
         /// Конструктор формы
@@ -33,10 +55,56 @@ namespace Lab3
         public MainWindow()
         {
             InitializeComponent();
-            Animals = new ObservableCollection<Animal> {};
+            Animals = new ObservableCollection<Animal>();
+            InitializeFactories();
             DataContext = this;
         }
 
+        /// <summary>
+        /// Инициализация фабрик
+        /// </summary>
+        private void InitializeFactories()
+        {
+            Factories = new ObservableCollection<IAnimalFactory>();
+            WolfAndHorseFactoryMethod = new WolfAndHorseFactoryMethod();
+            DolphinAndCowFactoryMethod = new DolphinAndCowFactoryMethod();
+
+            NeutralAnimal neutralAnimalPrototype = new NeutralAnimal();
+            FriendlyAnimal friendlyAnimalPrototype = new FriendlyAnimal();
+
+            new AnimalForm(neutralAnimalPrototype, AnimalFormRegime.PrototypeCreating).ShowDialog();
+            new AnimalForm(friendlyAnimalPrototype, AnimalFormRegime.PrototypeCreating).ShowDialog();
+            PrototypeAnimalFactoryMethod = new PrototypeAnimalFactoryMethod(neutralAnimalPrototype, friendlyAnimalPrototype);
+       
+            Factories.Add(WolfAndHorseFactoryMethod.CreateAnimalFactory());
+            Factories.Add(DolphinAndCowFactoryMethod.CreateAnimalFactory());
+            Factories.Add(PrototypeAnimalFactoryMethod.CreateAnimalFactory());
+
+        }
+
+        /// <summary>
+        /// Создать дружелюбное животное
+        /// </summary>
+        /// <param name="sender">Объект, инициировавший событие</param>
+        /// <param name="e">Данные события, связанные с кликом</param>
+        private void ButtonAddFriendlyAnimal_Click(object sender, RoutedEventArgs e)
+        {
+            FriendlyAnimal friendlyAnimal = ((IAnimalFactory)ComboBoxFactories.SelectedItem).CreateFriendlyAnimal();
+            if (new AnimalForm(friendlyAnimal, AnimalFormRegime.Add).ShowDialog() == true)
+                Animals.Add(friendlyAnimal);
+        }
+
+        /// <summary>
+        /// Создать нейтральное животное
+        /// </summary>
+        /// <param name="sender">Объект, инициировавший событие</param>
+        /// <param name="e">Данные события, связанные с кликом</param>
+        private void ButtonAddNeutralAnimal_Click(object sender, RoutedEventArgs e)
+        {
+            NeutralAnimal neutralAnimal = ((IAnimalFactory)ComboBoxFactories.SelectedItem).CreateNeutralAnimal();
+            if (new AnimalForm(neutralAnimal, AnimalFormRegime.Add).ShowDialog() == true)
+                Animals.Add(neutralAnimal);
+        }
 
         /// <summary>
         /// Создать дельфина
@@ -93,7 +161,7 @@ namespace Lab3
         /// <param name="e">Данные события, связанные с кликом</param>
         private void ButtonDelete_Click(object sender, RoutedEventArgs e)
         {
-            Animal selectedAnimal = (Animal)animalsGrid.SelectedItem;
+            Animal selectedAnimal = (Animal)GridAnimals.SelectedItem;
             if (selectedAnimal != null)
             {
                 if (new AnimalForm(selectedAnimal, AnimalFormRegime.Delete).ShowDialog() == true)
@@ -108,7 +176,7 @@ namespace Lab3
         /// <param name="e">Данные события, связанные с кликом</param>
         private void ButtonEdit_Click(object sender, RoutedEventArgs e)
         {
-            Animal selectedAnimal = (Animal)animalsGrid.SelectedItem;
+            Animal selectedAnimal = (Animal)GridAnimals.SelectedItem;
             if (selectedAnimal != null)
             {
                 Animal copiedAnimal;
@@ -118,16 +186,18 @@ namespace Lab3
                     case Type t when t == typeof(Horse): copiedAnimal = new Horse((Horse)selectedAnimal); break;
                     case Type t when t == typeof(Wolf): copiedAnimal = new Wolf((Wolf)selectedAnimal); break;
                     case Type t when t == typeof(Dolphin): copiedAnimal = new Dolphin((Dolphin)selectedAnimal); break;
-                    default: copiedAnimal = new Animal(selectedAnimal); break;
+                    case Type t when t == typeof(NeutralAnimal): copiedAnimal = new NeutralAnimal((NeutralAnimal)selectedAnimal); break;
+                    case Type t when t == typeof(FriendlyAnimal): copiedAnimal = new FriendlyAnimal((FriendlyAnimal)selectedAnimal); break;
+                    default: copiedAnimal = null; break;
                 }
                 if (new AnimalForm(copiedAnimal, AnimalFormRegime.Edit).ShowDialog() == true)
                     selectedAnimal.Copy(copiedAnimal);
-                    animalsGrid.Items.Refresh();
+                    GridAnimals.Items.Refresh();
             }
         }
 
         /// <summary>
-        /// Создание и добавление случайной коровы, лошади, волка и дельфина
+        /// Создание и добавление случайных коровы, лошади, волка и дельфина
         /// </summary>
         /// <param name="sender">Объект, инициировавший событие</param>
         /// <param name="e">Данные события, связанные с кликом</param>
@@ -147,11 +217,12 @@ namespace Lab3
         /// <param name="e">Данные события, связанные с изменением выделения</param>
         private void animalsGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            bool itemSelected = animalsGrid.SelectedItem != null;
-            editButton.IsEnabled = itemSelected;
-            editContextButton.IsEnabled = itemSelected;
-            deleteButton.IsEnabled = itemSelected;
-            deleteContextButton.IsEnabled = itemSelected;
+            bool itemSelected = GridAnimals.SelectedItem != null;
+            ButtonEdit.IsEnabled = itemSelected;
+            ContextButtonEdit.IsEnabled = itemSelected;
+            ButtonDelete.IsEnabled = itemSelected;
+            ContextButtonDelete.IsEnabled = itemSelected;
         }
+
     }
 }

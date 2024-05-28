@@ -10,7 +10,7 @@ namespace KPO
     /// <summary>
     /// Животное, вдохновленное Майнкрафтом :)
     /// </summary>
-    public class Animal
+    public abstract class Animal
     {
         /// <summary>
         /// Максимальное здоровье животного
@@ -105,6 +105,12 @@ namespace KPO
             Health = parAnimal.Health;
             Drop = parAnimal.Drop;
         }
+
+        /// <summary>
+        /// Клонировать объект
+        /// </summary>
+        /// <returns>Клон объекта</returns>
+        public abstract object Clone();
     
         /// <summary>
         /// Смерть животного

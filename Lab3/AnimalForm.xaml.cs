@@ -18,6 +18,9 @@ using System.Windows.Shapes;
 
 namespace Lab3
 {
+    /// <summary>
+    /// Окно работы с животным
+    /// </summary>
     public partial class AnimalForm : Window
     {
 
@@ -52,25 +55,45 @@ namespace Lab3
         /// </summary>
         private void UpdateComponent()
         {
-            switch (CurrentAnimal.GetType())
-            {
-                case Type t when t == typeof(Cow): cowElements.Visibility = Visibility.Visible; break;
-                case Type t when t == typeof(Horse): horseElements.Visibility = Visibility.Visible; break;
-                case Type t when t == typeof(Wolf): wolfElements.Visibility = Visibility.Visible; break;
-                case Type t when t == typeof(Dolphin): dolphinElements.Visibility = Visibility.Visible; break;
+            switch (CurrentAnimal)
+            { 
+                case NeutralAnimal _:
+                    {
+                        GridNeutralAnimalProperties.Visibility = Visibility.Visible;
+                        if (CurrentAnimal is Wolf) GridWolfProperties.Visibility = Visibility.Visible;
+                        if (CurrentAnimal is Dolphin) GridDolphinProperties.Visibility = Visibility.Visible;
+                        break;
+                    }
+                    
+                case FriendlyAnimal _:
+                    {
+                        GridFriendlyAnimalProperties.Visibility = Visibility.Visible;
+                        if (CurrentAnimal is Cow) GridCowProperties.Visibility = Visibility.Visible;
+                        if (CurrentAnimal is Horse) GridHorseProperties.Visibility = Visibility.Visible;
+                        break;
+                    }
             }
             switch (Regime) 
             {
-                case AnimalFormRegime.Add: acceptButton.Content = "Создать"; Title = "Создание"; break;
-                case AnimalFormRegime.Edit: acceptButton.Content = "Изменить"; Title = "Изменение"; break;
+                case AnimalFormRegime.Add: ButtonAccept.Content = "Создать"; Title = "Создание"; break;
+                case AnimalFormRegime.Edit: ButtonAccept.Content = "Изменить"; Title = "Изменение"; break;
                 case AnimalFormRegime.Delete:
                     {
-                        baseElements.IsEnabled = false;
-                        additionalElements.IsEnabled = false;
-                        acceptButton.Content = "Удалить";
+                        GridAnimalProperties.IsEnabled = false;
+                        GridNeutralAndFriendAnimalProperties.IsEnabled = false;
+                        GridCowWolfHorseDolphinProperties.IsEnabled = false;
+                        ButtonAccept.Content = "Удалить";
                         Title = "Удаление";
                         break;
-                    }   
+                    }
+                case AnimalFormRegime.PrototypeCreating:
+                    {
+                        ButtonCancel.IsEnabled = false;
+                        ButtonAccept.Content = "Добавить прототип";
+                        Title = "Создание прототипа";
+                        break;
+                    } 
+
             }
         }
 
@@ -124,58 +147,24 @@ namespace Lab3
             var byteConv = new ByteConverter();
             var pointConv = new PointConverter();
 
-            if (string.IsNullOrWhiteSpace(nameTextBox.Text))
+            if (string.IsNullOrWhiteSpace(TextBoxName.Text))
                 MessageBox.Show($"Имя - какой-то набор символов, а не пустая строка или пробелы", "У вас ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
-            else if (byteConv.ConvertBack(healthTextBox.Text, typeof(byte), null, CultureInfo.InvariantCulture) == DependencyProperty.UnsetValue)
+            else if (byteConv.ConvertBack(TextBoxHealth.Text, typeof(byte), null, CultureInfo.InvariantCulture) == DependencyProperty.UnsetValue)
                 MessageBox.Show($"Здоровье - это целое положительное число до {Animal.MAX_HEALTH}", "У вас ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
-            else if (pointConv.ConvertBack(coordinatesTextBox.Text, typeof(Point), null, CultureInfo.InvariantCulture) == DependencyProperty.UnsetValue)
+            else if (pointConv.ConvertBack(TextBoxCoordinates.Text, typeof(Point), null, CultureInfo.InvariantCulture) == DependencyProperty.UnsetValue)
                 MessageBox.Show("Координаты - это два целых числа, записанных через запятую (например, '100,-100')", "У вас ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
             else
             {
-                switch (CurrentAnimal.GetType())
+                switch (CurrentAnimal)
                 {
-                    case Type t when t == typeof(Cow):
+                    case NeutralAnimal _:
                         {
-                            if (byteConv.ConvertBack(happinessTextBox.Text, typeof(byte), null, CultureInfo.InvariantCulture) == DependencyProperty.UnsetValue)
-                                MessageBox.Show($"Счастье - это целое положительное число до 255", "У вас ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
-                            else if (byteConv.ConvertBack(milkTextBox.Text, typeof(byte), null, CultureInfo.InvariantCulture) == DependencyProperty.UnsetValue)
-                                MessageBox.Show($"Молоко - это целое положительное число до {Cow.MAX_MILK_LITERS}", "У вас ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
-                            else {
-                                this.DialogResult = true;
-                                this.Close();
-                            }
-                            break;
-                        }
-                    case Type t when t == typeof(Horse):
-                        {
-                            if (byteConv.ConvertBack(happynessTextBox.Text, typeof(byte), null, CultureInfo.InvariantCulture) == DependencyProperty.UnsetValue)
-                                MessageBox.Show($"Счастье - это целое положительное число до 255", "У вас ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
-                            else
-                            {
-                                this.DialogResult = true;
-                                this.Close();
-                            }
-                            break; 
-                        }
-                    case Type t when t == typeof(Wolf):
-                        {
-                            if (string.IsNullOrWhiteSpace(ownerNameTextBox.Text))
+                            if (byteConv.ConvertBack(TextBoxBiteDamage.Text, typeof(byte), null, CultureInfo.InvariantCulture) == DependencyProperty.UnsetValue)
+                                MessageBox.Show($"Сила укуса - это целое положительное число до {NeutralAnimal.MAX_BITE_DAMAGE}", "У вас ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+                            else if (CurrentAnimal is Wolf && string.IsNullOrWhiteSpace(TextBoxOwnerName.Text))
                                 MessageBox.Show($"Имя хозина - какой-то набор символов, а не пустая строка или пробелы", "У вас ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
-                            else if (byteConv.ConvertBack(biteDamageTextBox.Text, typeof(byte), null, CultureInfo.InvariantCulture) == DependencyProperty.UnsetValue)
-                                MessageBox.Show($"Сила укуса - это целое положительное число до {NeutralAnimal.MAX_BITE_DAMAGE}", "У вас ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
-                            else
-                            {
-                                this.DialogResult = true;
-                                this.Close();
-                            }
-                            break;
-                        }
-                    case Type t when t == typeof(Dolphin):
-                        {
-                            if (pointConv.ConvertBack(treasureCoordinatesTextBox.Text, typeof(Point), null, CultureInfo.InvariantCulture) == DependencyProperty.UnsetValue)
+                            else if (CurrentAnimal is Dolphin && pointConv.ConvertBack(TextBoxTreasureCoordinates.Text, typeof(Point), null, CultureInfo.InvariantCulture) == DependencyProperty.UnsetValue)
                                 MessageBox.Show("Координаты - это два целых числа, записанных через запятую (например, '100,-100')", "У вас ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
-                            else if (byteConv.ConvertBack(byteDamageTextBox.Text, typeof(byte), null, CultureInfo.InvariantCulture) == DependencyProperty.UnsetValue)
-                                MessageBox.Show($"Сила укуса - это целое положительное число до {NeutralAnimal.MAX_BITE_DAMAGE}", "У вас ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
                             else
                             {
                                 this.DialogResult = true;
@@ -183,6 +172,20 @@ namespace Lab3
                             }
                             break;
                         }
+                    case FriendlyAnimal _:
+                        {
+                            if (byteConv.ConvertBack(TextBoxHappiness.Text, typeof(byte), null, CultureInfo.InvariantCulture) == DependencyProperty.UnsetValue)
+                                MessageBox.Show($"Счастье - это целое положительное число до 255", "У вас ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+                            else if (CurrentAnimal is Cow && byteConv.ConvertBack(TextBoxMilk.Text, typeof(byte), null, CultureInfo.InvariantCulture) == DependencyProperty.UnsetValue)
+                                MessageBox.Show($"Молоко - это целое положительное число до {Cow.MAX_MILK_LITERS}", "У вас ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+                            else
+                            {
+                                this.DialogResult = true;
+                                this.Close();
+                            }
+                            break;
+                        }
+                   
                 }
             }
         }
