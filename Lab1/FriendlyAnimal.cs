@@ -88,5 +88,14 @@ namespace KPO
             ++Happyness;
             return Happyness;
         }
+
+        /// <summary>
+        /// Клонировать объект
+        /// </summary>
+        /// <returns>Клон объекта</returns>
+        public override object Clone()
+        {
+            return new FriendlyAnimal(this);
+        }
     }
 }

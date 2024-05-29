@@ -79,6 +79,13 @@ namespace KPO
             return parVictim.ToDamage(BiteDamage);
         }
 
-
+        /// <summary>
+        /// Клонировать объект
+        /// </summary>
+        /// <returns>Клон объекта</returns>
+        public override object Clone()
+        {
+            return new NeutralAnimal(this);
+        }
     }
 }

@@ -107,15 +107,6 @@ namespace Lab3
             TreasureLocation = new Point(random.Next(MIN_COORDINATE, MAX_COORDINATE + 1), random.Next(MIN_COORDINATE, MAX_COORDINATE + 1));
         }
 
-        /// <summary>
-        /// Сгенерировать случайное животное
-        /// </summary>
-        /// <returns>Случайное животное</returns>
-        public static Animal GenerateAnimal()
-        {
-            Update();
-            return new Animal(Name, Point, Health, Drop);
-        }
 
         /// <summary>
         /// Сгенерировать случайное дружелюбное животное
