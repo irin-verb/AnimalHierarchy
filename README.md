@@ -2,6 +2,10 @@
 
 ## About
 
+> Проект в вузе. Wpf-приложение для работы с иерархией животных и создания животных с помощью шаблонов проектирования
+>
+> University project. WPF application for working with animal hierarchy and creating animals using design patterns
+> 
 **Предмет (Subject)** :  Конструирование программного обеспечения / Software design
 
 **Курс / Course** : 3ий курс / 3rd course
